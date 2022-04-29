@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Database</title>
+    <link rel="stylesheet" href="commonStyles.css" />
+  </head>
+
+  <body>
+    <div id="links">
+      <div><a href="index.html">Home</a></div>
+      <div><a href="applied.html">Applied Jobs</a></div>
+      <div><a href="bookmark.html">Bookmarks</a></div>
+    </div>
+
+
+    <select id="sortNames" onchange="handleNameSort()">
+      <option value="">Sort By Names</option>
+      <option value="ascending">Ascending</option>
+      <option value="descending">Descending</option>
+    </select>
+
+    <select id="sortSalary" onchange="handleSalarySort()">
+      <option value="">Sort By Salary</option>
+      <option value="htl">High to Low</option>
+      <option value="lth">Low to High</option>
+    </select>
+
+    <select id="filterRole" onchange="handleRoleFilter()">
+      <option value="">Filter by Role</option>
+      <option value="FSD">FSD</option>
+      <option value="Frontend">Frontend</option>
+      <option value="Backend">Backend</option>
+    </select>
+
+    <main>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Job applied</th>
+            <th>Salary expected</th>
+            <th>Add to bookmark</th>
+            <th>Delete</th>
+            
+          </tr>
+        </thead>
+        <tbody id="body">
+          <!-- Append your output to tbody -->
+        </tbody>
+      </table>
+    </main>
+  </body>
+  <script>
+    //you need to code here
+    var jobArr=JSON.parse(localStorage.getItem("jobList"));
+console.log(jobArr);
+
+ //reduce  find the total;
+ var sum=jobArr.reduce(function(acc,elem){
+      return acc+Number(elem.PersonSalary);
+    },0)
+    console.log(sum)
+
+displayData(jobArr);
+
+
+
+    
+
+var bookMarkArr=JSON.parse(localStorage.getItem("bookmarks")) || []
+
+
+window.addEventListener("load", function () {
+      displayData(jobArr);
+    });
+
+function handleSalarySort() {
+      var selected = document.querySelector("#sortSalary").value;
+      console.log(selected);
+      if (selected == "htl") {
+        jobArr.sort(function (a, b) {
+          return b.salary - a.salary;
+        });
+        displayData(jobArr);
+      }
+
+      if (selected == "lth") {
+        jobArr.sort(function (a, b) {
+          return a.salary - b.salary;
+        });
+        displayData(jobArr);
+      }
+    }
+
+
+    
+
+function displayData(data){
+  data.forEach(function(elem){
+   // console.log(elem)
+  var tr=document.createElement("tr")
+
+  
+  var td1=document.createElement("td");
+  td1.innerText=elem.PersonName
+
+  var td2=document.createElement("td");
+  td2.innerText=elem.PersonEmail
+
+  var td3=document.createElement("td");
+  td3.innerText=elem.PersonRole
+
+  var td4=document.createElement("td");
+  td4.innerText=elem.PersonSalary
+
+  var td5=document.createElement("td");
+  td5.innerText="Bookmark";
+  td5.style.color="blue";
+  td5.style.cursor="pointer"
+  td5.addEventListener("click",function(){
+    
+    bookMarkFunction(elem)
+  })
+
+  var td6=document.createElement("button");
+  td6.innerText="Delete";
+  td6.style.color="white";
+  td6.style.padding="10px 15px 10px 15px";
+  td6.style.cursor="pointer";
+  td6.style.backgroundColor="red"
+  td6.style.border="none"
+  td6.style.margin="20px"
+  td6.style.borderRadius="8px"
+
+  td6.addEventListener("click",deleterow)
+
+   function deleterow()
+  {
+    event.target.parentNode.remove();
+  }
+  
+
+  
+
+  tr.append(td1,td2,td3,td4,td5,td6)
+ document.querySelector("tbody").append(tr);
+
+})
+}
+function  bookMarkFunction(elem){
+  //console.log(elem)
+  bookMarkArr.push(elem)
+  // console.log( bookMarkArr)
+
+  localStorage.setItem("bookmarks",JSON.stringify(bookMarkArr))
+}  
+    
+  </script>
+</html>
+  </script>
+</html>
